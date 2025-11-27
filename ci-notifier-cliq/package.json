@@ -1,0 +1,29 @@
+{
+    "name": "ci-notifier-cliq",
+    "version": "1.0.0",
+    "description": "Zoho Cliq DevOps/CI Notifier with Dashboard",
+    "scripts": {
+        "install-all": "cd backend && npm install && cd ../frontend && npm install",
+        "migrate": "node scripts/migrate.js",
+        "dev:backend": "cd backend && npm run dev",
+        "dev:frontend": "cd frontend && npm run dev",
+        "dev": "npm run migrate && concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+        "start": "cd backend && npm start",
+        "test": "cd backend && npm test",
+        "build:frontend": "cd frontend && npm run build",
+        "build": "npm run build:frontend"
+    },
+    "keywords": [
+        "zoho",
+        "cliq",
+        "ci",
+        "devops",
+        "notifications",
+        "dashboard"
+    ],
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    }
+}

@@ -1,0 +1,37 @@
+name: CI Notification
+
+on:
+  workflow_run:
+    workflows: ["*"]  # Listen to all workflows
+    types:
+      - completed
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    
+    steps:
+      - name: Send webhook to CI Notifier
+        run: |
+          curl -X POST ${{ secrets.CI_NOTIFIER_WEBHOOK_URL }} \
+            -H "Content-Type: application/json" \
+            -d @- <<EOF
+          {
+            "action": "${{ github.event.action }}",
+            "workflow_run": {
+              "id": ${{ github.event.workflow_run.id }},
+              "name": "${{ github.event.workflow_run.name }}",
+              "head_branch": "${{ github.event.workflow_run.head_branch }}",
+              "head_sha": "${{ github.event.workflow_run.head_sha }}",
+              "status": "${{ github.event.workflow_run.status }}",
+              "conclusion": "${{ github.event.workflow_run.conclusion }}",
+              "html_url": "${{ github.event.workflow_run.html_url }}",
+              "run_number": ${{ github.event.workflow_run.run_number }},
+              "event": "${{ github.event.workflow_run.event }}"
+            },
+            "repository": {
+              "full_name": "${{ github.repository }}"
+            }
+          }
+          EOF

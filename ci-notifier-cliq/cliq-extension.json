@@ -1,0 +1,40 @@
+{
+    "name": "CI Notifier",
+    "description": "Real-time DevOps/CI notifications with dashboard for Zoho Cliq",
+    "version": "1.0.0",
+    "capabilities": [
+        "bot",
+        "function",
+        "command"
+    ],
+    "bot": {
+        "name": "CI Bot",
+        "description": "Receives CI/CD webhooks and posts notifications",
+        "unique_name": "ci_bot",
+        "webhooks": [
+            {
+                "name": "ci_webhook",
+                "url": "${BACKEND_URL}/ci/webhook",
+                "description": "Receive CI/CD webhooks"
+            }
+        ]
+    },
+    "functions": [
+        {
+            "name": "ci-action-handler",
+            "description": "Handle actions from CI notification cards",
+            "handler_url": "${BACKEND_URL}/cliq/action",
+            "type": "button_handler"
+        }
+    ],
+    "commands": [
+        {
+            "name": "/test-ci-card",
+            "description": "Send a test CI notification card",
+            "handler": {
+                "type": "invoke_url",
+                "url": "${BACKEND_URL}/cliq/test-card"
+            }
+        }
+    ]
+}
